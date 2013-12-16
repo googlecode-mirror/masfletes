@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * Description of UsuariosController
+ *
+ * @author ricardo.guerra
+ */
+class Admin_VehicleTypesController extends Model3_Controller
+{
+    public function init()
+    {
+        $this->view->setTemplate('Admin');
+    }
+    
+    public function indexAction()
+    {
+        $repo = $this->getEntityManager('DefaultDb')->getRepository('DefaultDb_Entity_VehicleType');
+        $this->view->entities = $repo->findAll();
+    }
+    
+    public function formAction()
+    {
+        $this->view->dataRequest = NULL;
+        
+        if( !is_null($this->getRequest()->getParam('id')) && is_numeric($this->getRequest()->getParam('id')) )
+        {
+            $idReq = $this->getRequest()->getParam('id');
+            $em = $this->getEntityManager('DefaultDb');
+            $this->view->dataRequest = $em->getRepository('DefaultDb_Entity_VehicleType')->find($idReq);
+        }
+        
+        if( $this->getRequest()->isPost() )
+        {
+            $msg = "Registro creado correctamente";
+            $link = "form";
+            $data = $this->getRequest()->getPost();
+            if( is_null($this->view->dataRequest) )
+                $entity = new DefaultDb_Entity_VehicleType();
+            else
+            {
+                $entity = $this->view->dataRequest;
+                $msg = "Sus cambios han sido guardados correctamente";
+                $link .= "/id/".$entity->getId();
+            }
+            
+            $entity->setName($data['nameTF']);
+            $entity->setDescription($data['descriptionTF']);
+            
+            $em = $this->getEntityManager('DefaultDb');
+            $em->persist($entity);
+            $em->flush();
+
+            Model3_Site::setTempMsg("msg", $msg);
+            $this->redirect ("Admin/".$this->getRequest()->getController()."/".$link);
+        }
+    }
+}
+?>

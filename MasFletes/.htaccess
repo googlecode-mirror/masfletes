@@ -1,0 +1,6 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^portalmf\.masfletes\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.portalmf\.masfletes\.com$
+RewriteRule ^/?$ "http\:\/\/portalmf\.masfletes\.com\/public" [R=301,L]
+
