@@ -103,12 +103,16 @@ class Agent_RoutesController extends Model3_Controller
             
             
             $date=$route->getLoadAvailabilityDate()->format('Y-m-d');
-            $emailAgent=$route->getEmail();
-            $x = new Model3_Auth();
-            $x->getCredentials('username');
-            
+           // $emailAgent=$route->getEmail();
             $Shipments = $em->getRepository('DefaultDb_Entity_Shipment');
             
+            $emailUser = $em->getRepository('DefaultDb_Entity_User');
+            $emailUser->getEmailUser($route->getUser());
+            while ($value = $emailUser->fetch(PDO::FETCH_ASSOC))
+                { 
+                $emailAgent = $value['email'];
+                }
+                    
             $getZone = $em->getRepository('DefaultDb_Entity_Zone');
             $this->view->getZone =  $getZone->getZone($destinyState->getId(),$destinyCity->getId());
             $countZone = count($this->view->getZone);
@@ -214,7 +218,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                 //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress($x,'Coordinador');
+                $mail->AddAddress($emailAgent,'Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
@@ -283,7 +287,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                  //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress($x,'Coordinador');
+                $mail->AddAddress($emailAgent,'Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
