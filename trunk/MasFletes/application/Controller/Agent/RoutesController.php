@@ -179,7 +179,7 @@ class Agent_RoutesController extends Model3_Controller
                 { 
                 $emailAgent = $value['username'];
                 }
-            
+                var_dump($emailAgent);
             //////////////////////////////////////////////////////////////////// 
             //                                                                //
             //  Esta sección envía correos a: Coordinadores cuando no         //
