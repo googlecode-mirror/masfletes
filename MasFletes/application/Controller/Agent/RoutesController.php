@@ -104,6 +104,8 @@ class Agent_RoutesController extends Model3_Controller
             
             $date=$route->getLoadAvailabilityDate()->format('Y-m-d');
             $emailAgent=$route->getEmail();
+            $x = new Model3_Auth();
+            $x->getCredentials('username');
             
             $Shipments = $em->getRepository('DefaultDb_Entity_Shipment');
             
@@ -212,7 +214,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                 //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress($emailAgent,'Coordinador');
+                $mail->AddAddress($x,'Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
@@ -281,7 +283,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                  //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress($emailAgent,'Coordinador');
+                $mail->AddAddress($x,'Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
