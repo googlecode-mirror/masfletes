@@ -179,7 +179,7 @@ class Agent_RoutesController extends Model3_Controller
                 { 
                 $emailAgent = $value['username'];
                 }
-                var_dump($emailAgent);
+                
             //////////////////////////////////////////////////////////////////// 
             //                                                                //
             //  Esta sección envía correos a: Coordinadores cuando no         //
@@ -217,7 +217,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                 //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress('sistemas@masfletes.com','Coordinador');
+                $mail->AddAddress('nayeli.ubieta@gmail.com','Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
@@ -286,7 +286,7 @@ class Agent_RoutesController extends Model3_Controller
                 $mail->From = 'admin@masdistribucion.com.mx';
                 $mail->FromName = 'Notificaciones de Mas Fletes';
                  //Aqui va el correo del coordinador, que esta en la sesión
-                $mail->AddAddress('sistemas@masfletes.com','Coordinador');
+                $mail->AddAddress('nayeli.ubieta@gmail.com','Coordinador');
                 $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
                 $mail->MsgHTML($correo);
                 $mail->Send();
