@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Entity
+ * @Entity(repositoryClass="DefaultDb_Repositories_ShipmentRepository")
  * @Table(name="shipments")
  */
 class DefaultDb_Entity_Shipment
@@ -320,6 +320,15 @@ class DefaultDb_Entity_Shipment
     public function setShipmentType($shipmentType)
     {
         $this->shipmentType = $shipmentType;
+    }
+    
+    public function getTypeText()
+    {
+  
+            $typeText='Cargas';
+            $eventText='Rutas';
+      
+        return array($typeText, $eventText);
     }
 
 }
