@@ -26,7 +26,7 @@ class DefaultDb_Repositories_UserRepository extends EntityRepository
     public function getEmailUser($id)
     {
        $cnx = $this->getEntityManager()->getConnection();
-       $emailUser = $cnx->executeQuery('SELECT email 
+       $emailUser = $cnx->executeQuery('SELECT username
                                       FROM users WHERE id='.$id.'');
 
        return $emailUser;
