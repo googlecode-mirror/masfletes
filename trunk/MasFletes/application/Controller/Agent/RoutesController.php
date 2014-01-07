@@ -110,7 +110,7 @@ class Agent_RoutesController extends Model3_Controller
             $emailUser->getEmailUser($route->getUser());
             while ($value = $emailUser->fetch(PDO::FETCH_ASSOC))
                 { 
-                $emailAgent = $value['email'];
+                echo $emailAgent = $value['email'];
                 }
                     
             $getZone = $em->getRepository('DefaultDb_Entity_Zone');
