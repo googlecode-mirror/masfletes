@@ -174,8 +174,8 @@ class Agent_RoutesController extends Model3_Controller
             $countShipments= count($this->view->coincide);
             
             $emailUser = $em->getRepository('DefaultDb_Entity_User');
-            $emailUser->getEmailUser($route->getUser());
-            foreach ($emailUser as $value)
+            $this->view->email =  $emailUser->getEmailUser($route->getUser());
+            foreach ($this->view->email as $value)
                 { 
                 $emailAgent = $value['username'];
                 }
