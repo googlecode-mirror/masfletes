@@ -175,7 +175,7 @@ class Agent_RoutesController extends Model3_Controller
             
             $emailUser = $em->getRepository('DefaultDb_Entity_User');
             $emailUser->getEmailUser($route->getUser());
-            while ($value = $emailUser->fetch(PDO::FETCH_ASSOC))
+            foreach ($emailUser as $value)
                 { 
                 $emailAgent = $value['username'];
                 }

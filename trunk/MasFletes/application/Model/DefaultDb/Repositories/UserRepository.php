@@ -29,7 +29,7 @@ class DefaultDb_Repositories_UserRepository extends EntityRepository
        $emailUser = $cnx->executeQuery('SELECT username
                                       FROM users WHERE id='.$id.'');
 
-       return $emailUser;
+       return $emailUser->fetchAll();
     } 
 }
 
