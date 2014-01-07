@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Entity
+ * @Entity(repositoryClass="DefaultDb_Repositories_RouteRepository")
  * @Table(name="routes")
  */
 class DefaultDb_Entity_Route
@@ -389,5 +389,14 @@ class DefaultDb_Entity_Route
     public function setEffectiveDays($effectiveDays)
     {
         $this->effectiveDays = $effectiveDays;
+    }
+    
+    public function getTypeText()
+    {
+  
+            $typeText='Ruta';
+            $eventText='Cargas';
+      
+        return array($typeText, $eventText);
     }
 }
