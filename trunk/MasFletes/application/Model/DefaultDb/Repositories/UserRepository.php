@@ -21,6 +21,15 @@ class DefaultDb_Repositories_UserRepository extends EntityRepository
                                             ORDER BY first_name DESC');
 
        return $contact->fetchAll();
+    }
+    
+    public function getEmailUser($id)
+    {
+       $cnx = $this->getEntityManager()->getConnection();
+       $emailUser = $cnx->executeQuery('SELECT email 
+                                      FROM users WHERE id='.$id.'');
+
+       return $emailUser;
     } 
 }
 

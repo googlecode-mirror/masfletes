@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Entity
+ * @Entity(repositoryClass="DefaultDb_Repositories_UserRepository")
  * @Table(name="users")
  */
 class DefaultDb_Entity_User
