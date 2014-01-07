@@ -103,16 +103,8 @@ class Agent_RoutesController extends Model3_Controller
             
             
             $date=$route->getLoadAvailabilityDate()->format('Y-m-d');
-           // $emailAgent=$route->getEmail();
             $Shipments = $em->getRepository('DefaultDb_Entity_Shipment');
             
-            $emailUser = $em->getRepository('DefaultDb_Entity_User');
-            $emailUser->getEmailUser($route->getUser());
-            while ($value = $emailUser->fetch(PDO::FETCH_ASSOC))
-                { 
-                echo $emailAgent = $value['email'];
-                }
-                    
             $getZone = $em->getRepository('DefaultDb_Entity_Zone');
             $this->view->getZone =  $getZone->getZone($destinyState->getId(),$destinyCity->getId());
             $countZone = count($this->view->getZone);
@@ -180,6 +172,13 @@ class Agent_RoutesController extends Model3_Controller
             $coincide = $em->getRepository('DefaultDb_Entity_Shipment');
             $this->view->coincide =  $coincide->getNotificationForShipments($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$date);
             $countShipments= count($this->view->coincide);
+            
+            $emailUser = $em->getRepository('DefaultDb_Entity_User');
+            $emailUser->getEmailUser($route->getUser());
+            while ($value = $emailUser->fetch(PDO::FETCH_ASSOC))
+                { 
+                $emailAgent = $value['username'];
+                }
             
             //////////////////////////////////////////////////////////////////// 
             //                                                                //
