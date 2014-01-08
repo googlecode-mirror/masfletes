@@ -93,7 +93,7 @@ use Doctrine\ORM\Query;
                     citiesOrigin.name AS City_Origin_Name, 
                     citiesOrigin.id,
                     users.id,
-                    users.email AS EmailUser
+                    users.username AS EmailUser
                     FROM routes
                     LEFT JOIN vehicles ON ( routes.vehicle_id = vehicles.id ) 
                     LEFT JOIN vehicle_types ON ( routes.vehicleType_id = vehicle_types.id ) 
