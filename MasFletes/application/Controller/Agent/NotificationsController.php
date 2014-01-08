@@ -84,6 +84,11 @@ class Agent_NotificationsController extends Model3_Controller
             $em->persist($notification);
             $em->flush();
             
+            
+            
+            
+            
+            
             if( is_null($this->view->dataRequest) )
                 Model3_Site::setTempMsg("msg", "La notificaci&oacute;n ha sido registrada correctamente");
             else
