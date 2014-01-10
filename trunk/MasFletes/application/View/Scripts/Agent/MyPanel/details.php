@@ -1,8 +1,8 @@
 <div class="well">
     <table class="table table-hover"> 
     <tr>
-        <td><img src="<?php echo $view->getBaseUrl(); ?>/images/eventPanel.png" class="img-rounded" height="120" width="70"></td>
-        <td><b><h5>::: Detalle de eventos :::</h5></b></td>
+        <td><img src="<?php echo $view->getBaseUrl(); ?>/images/headImage/eventPanel.png" class="img-rounded" height="120" width="70"></td>
+        <td><b><h3>::: Detalle de eventos :::</h3></b></td>
     </tr>
     </table>
  
