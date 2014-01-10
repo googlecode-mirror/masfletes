@@ -199,8 +199,8 @@ class Agent_RoutesController extends Model3_Controller
             {
                 list ($typeText,$eventText)=$route->getTypeText();
                     
-                $correo='<html><head></head><body>
-                <h4>:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h4>
+                $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
                 <p style="font-family:Arial;font-size:13px;line-height:16px;">
                 <strong>Un usuario acaba de registrar una '.$typeText.' con estos datos:</strong><br /><br />
                 <strong>* '.$typeText.' n&uacute;mero:  </strong>'.$route->getId().'<br />
@@ -250,8 +250,8 @@ class Agent_RoutesController extends Model3_Controller
                     
                 list ($typeText,$eventText)=$route->getTypeText();
 		
-                $correo='<html><head></head><body>
-                <h4>:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h4>
+                $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
                 <p style="font-family:Arial;font-size:13px;line-height:16px;">
                 <strong>Se encontraron las siguientes '.$eventText.' que coinciden con la publicaci&oacute;n de un usuario, los detalles son: </strong><br />
                 <strong>* Correo: </strong><br /><br />
