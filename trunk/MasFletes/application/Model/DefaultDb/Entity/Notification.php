@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @Entity
+ * @Entity(repositoryClass="DefaultDb_Repositories_NotificationRepository")
  * @Table(name="notifications")
  */
 class DefaultDb_Entity_Notification

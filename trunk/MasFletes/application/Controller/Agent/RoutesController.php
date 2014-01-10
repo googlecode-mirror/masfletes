@@ -104,6 +104,64 @@ class Agent_RoutesController extends Model3_Controller
                 $emailAgent = $value['username'];
             }
                 
+             ////////////////////////////////////////////////////////////////////
+            // Mi Panel                                                       //
+            // Rutas que coinciden con cargas                                 //
+            ////////////////////////////////////////////////////////////////////
+            
+            $Shipments = $em->getRepository('DefaultDb_Entity_Shipment');
+            $this->view->getShipment =  $Shipments->getNotificationForShipments($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$date);
+            $countShipmentsPanel = count($this->view->getShipment);
+           
+            if ($countShipmentsPanel >= 1)
+            {
+                foreach ($this->view->getShipment as $key)
+                {
+                    $this->view->idShipmen.= $key['Shipments_Id'].',';
+                }
+                    
+                $event_panel = new DefaultDb_Entity_EventPanel();
+                $event_panel->setEvent('routes');
+                $event_panel->setIdEvent($route->getId());
+                $event_panel->setCoincidenceNumber($this->view->idShipmen);
+                $event_panel->setCreationDate($route->getLoadAvailabilityDate());
+                $event_panel->setStatus('0');
+                $event_panel->setDataHidden('0');
+                    
+                $em->persist($event_panel);
+                $em->flush();
+            }
+            
+            ///////////////////////////////////////////////////////////////////
+            // Mi Panel           
+            // Rutas que coinciden con una notificacion                                          //
+            ////////////////////////////////////////////////////////////////////    
+                 
+                 $routesNotification = $em->getRepository('DefaultDb_Entity_Notification');
+                 $actionType='2';
+                 $this->view->routesNotifications =  $routesNotification->getCoincidenceEvent($actionType,$vehicle->getId(),$destinyState->getId(),$destinyCity->getId());
+                 $countRoutesNotification= count($this->view->routesNotifications);
+                
+                 if ($countRoutesNotification != 0 )
+                 {
+                     foreach ($this->view->routesNotifications as $key)
+                     {
+                     $this->view->idNotification= $key['Id_Notification'];
+                     }
+                      
+                     $em = $this->getEntityManager('DefaultDb');
+                     $notificationEventPanel = new DefaultDb_Entity_EventPanel();
+                     $notificationEventPanel->setEvent('routes');
+                     $notificationEventPanel->setIdEvent($route->getId());
+                     $notificationEventPanel->setCreationDate($route->getLoadAvailabilityDate());
+                     $notificationEventPanel->setStatus('0');
+                     $notificationEventPanel->setDataHidden('0');
+                     $notificationEventPanel->setCoincidenceEvent('3');
+                     $notificationEventPanel->setCoincidenceNumber($this->view->idNotification);
+                     $em->persist($notificationEventPanel);
+                     $em->flush();
+                 }
+                 
             
             $getZone = $em->getRepository('DefaultDb_Entity_Zone');
             $this->view->getZone =  $getZone->getZone($destinyState->getId(),$destinyCity->getId());
@@ -175,7 +233,89 @@ class Agent_RoutesController extends Model3_Controller
            // ActionType:  1(Shipment), 2(Routes)                             //
            /////////////////////////////////////////////////////////////////////
          
-            
+             $notification = $em->getRepository('DefaultDb_Entity_Notification');
+            $actiontype='2';
+            $this->view->email =  $notification->getEmailForSend($actiontype,$vehicle->getId(),$destinyState->getId(),$destinyCity->getId());
+            $countEmail= count($this->view->email);
+           
+                if ($countEmail !=0)
+                { 
+                    foreach ($this->view->email as $var)
+                    {
+                        $this->view->idofnotification.=$var['id'];
+                        $this->view->emailforuser.=$var['email'];
+                        $this->view->notificationdate=$var['Notification_Date_Format'];
+                    }
+                    
+                    $routes = $em->getRepository('DefaultDb_Entity_Route');
+                    $this->view->routes =  $routes->getNotificationForRoutes($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$this->view->notificationdate);
+                    $countRoutes= count($this->view->routes);
+                    
+                    if ($countRoutes !=0)
+                    {
+                    list ($typeText,$eventText)=$route->getTypeText();
+                             
+                        foreach ($this->view->routes as $key)
+                        {
+                            $this->view->idRoutes.= $key['Route_Id'].'<br />';
+                            $this->view->destinyRoutes.=$key['City_Destiny_Name'].' , '.$key['State_D_Abbrev'].'<br />';
+                            $this->view->originRoutes.=$key['City_Origin_Name'].' , '.$key['State_O_Abbrev'].'<br />';
+                            $this->view->vehicleRoutes.=$key['Vehicle_Name'].' De '.$key['Vehicle_Type_Name'].'<br />';
+                            $this->view->Date.=$key['New_Availability_Date'].'<br />';
+                            $this->view->Comments.= $key['Comment'].'<br />';
+                        }
+                                
+                        $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                        <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de unidades disponibles en MasFletes.com ::::::</h3>
+                        <p style="font-family:Arial;font-size:12px;line-height:16px;">
+                        <strong>Tenemos '.$countRoutes.' unidades de tu inter&eacute;s que est&aacute;n disponibles.</strong><br /><br />
+                        <table border="1" cellpadding="3" cellspacing="3" style="font-size:12px;">
+                        <tr>
+                            <td align="center"><strong>'.$typeText.' No.</strong></td>
+                            <td align="center"><strong>Origen</strong></td>
+                            <td align="center"><strong>Destino</strong></td>
+                            <td align="center"><strong>Veh&iacute;culo</strong></td>
+                            <td align="center"><strong>Disponible Hasta</strong></td>
+                            <td align="center"><strong>Comentarios</strong></td>
+                        </tr>
+                        <tr>
+                            <td align="center"> '.$this->view->idRoutes.'</td>
+                            <td> '.$this->view->originRoutes.'</td>
+                            <td> '.$this->view->destinyRoutes.'</td>
+                            <td> '.$this->view->vehicleRoutes.'</td>
+                            <td> '.$this->view->Date.'</td>
+                            <td> '.$this->view->Comments.'</td>
+                        </tr>
+                        </table><br />
+                        <strong>Otros clientes interesados en estas rutas tambi&eacute;n han sido notificados.</strong><br /><br />
+                        <strong>Si deseas ser notificado de otras rutas por favor, cont&aacute;ctanos.</strong><br /><br />
+                        <strong>De interesarte alguna de ellas contacta a tu coordinador o comun&iacute;cate a los siguientes tel&eacute;fonos:</strong><br />
+                        <strong>Nextel: 62 * 179099 *5 &oacute; *2 &oacute; al 01 - 444 - 2571546 con Arturo Mac&iacute;as</strong><br />
+                        <strong>Oficina: 01 - 444 - 8240764 Con Cesar Castillo</strong><br />
+                        <strong>Oficina: 01 - 444 - 8240647</strong><br />
+                        <strong>Correo : masfletes@masfletes.com</strong><br /><br />
+                        </p></body></html>';
+                                
+                            
+                        $mail = new PHPMailer();
+                        $mail->IsSMTP();
+                        $mail->Host = 'mail.masdistribucion.com.mx';
+                        $mail->Port = 587;
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'admin@masdistribucion.com.mx';
+                        $mail->Password = 'distribucion2900';
+                        $mail->From = 'administrador@masfletes.com';
+                        $mail->FromName = 'MasFletes.Com';
+                        $mail->AddAddress($emailAgent,'Coordinador');
+                       /* foreach (explode(',', $this->view->emailforuser) as $varx)
+                        {
+                        $mail->AddAddress($varx);
+                        }*/
+                        $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
+                        $mail->MsgHTML($correo);
+                        $mail->Send();
+                    }
+                }
             
             ////////////////////////////////////////////////////////////////////
             //                                                                //
@@ -261,7 +401,7 @@ class Agent_RoutesController extends Model3_Controller
                 <strong>* Ruta No.:'.$route->getId().'<br />
                 <strong>* De:  </strong>'.utf8_decode($sourceCity->getName().' , '.$sourceState->getName()).'<br />
                 <strong>* A:  </strong>'.utf8_decode($destinyCity->getName().' , '.$destinyState->getName()).'<br />
-                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br /><br />
+                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
                 <strong>**************************************************************************************</strong><br />							
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>

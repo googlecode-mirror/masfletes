@@ -201,7 +201,7 @@ class Agent_MyPanelController extends Model3_Controller
                     <td><span class="icon-star"></span><br /></td>
                     <td><b>'.$this->view->alias.$this->view->idPanel.'</b><br /></td>'
                     . '<td><b>'.$this->view->availabilityDate.'</b><br /></td>'
-                    . '<td><b> La Notificaci&oacute;n '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' '.$this->view->TypeEvent.'  que son: '.$this->view->countNumbertEvent.'</b></td>'
+                    . '<td><b>La Notificaci&oacute;n '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' '.$this->view->TypeEvent.'  que son: '.$this->view->countNumbertEvent.'</b></td>'
                     . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'', 'ce' => ''.$this->view->coincidenceEvent.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><span class="icon-remove"></span><br /></td>'
                     . '</tr>';
@@ -212,7 +212,7 @@ class Agent_MyPanelController extends Model3_Controller
                     $this->view->notification = '<td><b><span class="icon-ok"></span></b><br /></td>'
                     . '<td>'.$this->view->alias.$this->view->idPanel.'<br /></td>'
                     . '<td>'.$this->view->availabilityDate.'<br /></td>'
-                    . '<td>La La Notificaci&oacute;n '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' '.$this->view->TypeEvent.' que son: '.$this->view->countNumbertEvent.'</td>'
+                    . '<td>La Notificaci&oacute;n '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' '.$this->view->TypeEvent.' que son: '.$this->view->countNumbertEvent.'</td>'
                     . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'', 'ce' => ''.$this->view->coincidenceEvent.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'idHidden' => ''.$this->view->idPanel.'', 'hi' => ''.$this->view->dataHidden.'')).'"><span class="icon-remove"></span></a><br /></td>'
                     . '</tr>';
@@ -282,7 +282,6 @@ class Agent_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyShipments=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleShipments=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateShipments=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td><br /></td>'
                     .'<td>'.$this->view->CommentsShipments= $value['Comment'].'<br /></td>'
                     .'<td>'.$this->view->contactUserShipments= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
                 }
@@ -330,7 +329,6 @@ class Agent_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyShipmentsCoincidence=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleShipmentsCoincidence=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateShipments=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td><br /></td>'
                     .'<td>'.$this->view->CommentsShipmentsCoincidence= $value['Comment'].'<br /></td>'
                     .'<td>'.$this->view->contactUserShipmentsCoincidence= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
                 }

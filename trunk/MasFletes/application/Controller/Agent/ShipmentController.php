@@ -106,6 +106,36 @@ class Agent_ShipmentController extends Model3_Controller
                 $emailAgent = $value['username'];
             }
             
+            ////////////////////////////////////////////////////////////////////
+            // Mi Panel   
+            // Cargas que coinciden con Rutas                                 //
+            ////////////////////////////////////////////////////////////////////
+            
+            $Routes = $em->getRepository('DefaultDb_Entity_Route');
+            $this->view->getRoute =  $Routes->getNotificationForRoutes($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$date);
+            $count = count($this->view->getRoute);
+           
+             if ($count !=0)
+                {
+                    foreach ($this->view->getRoute as $key)
+                    {
+                    $this->view->idRoute.= $key['Route_Id'].',';
+                    }
+                    
+                    $event_panel = new DefaultDb_Entity_EventPanel();
+                    $event_panel->setEvent('shipments');
+                    $event_panel->setIdEvent($shipment->getId());
+                    $event_panel->setCoincidenceNumber($this->view->idRoute);
+                    $event_panel->setCreationDate($shipment->getSourceDate());
+                    $event_panel->setStatus('0');
+                    $event_panel->setDataHidden('0');
+                    
+                    $em->persist($event_panel);
+                    $em->flush();
+                 }
+                 
+            
+            
             $getZone = $em->getRepository('DefaultDb_Entity_Zone');
             $this->view->getZone =  $getZone->getZone($destinyState->getId(),$destinyCity->getId());
             $countZone = count($this->view->getZone);
@@ -164,7 +194,38 @@ class Agent_ShipmentController extends Model3_Controller
                 }
             }
             
-             /////////////////////////////////////////////////////////////////////
+           ///////////////////////////////////////////////////////////////////
+             // Mi Panel                                                      //
+             // Cargas que coinciden con una notificacion                      //
+             ///////////////////////////////////////////////////////////////////    
+                 
+                 $shipmentsNotification = $em->getRepository('DefaultDb_Entity_Notification');
+                 $actionType='1';
+                 $this->view->shipmentsNotification =  $shipmentsNotification->getCoincidenceEvent($actionType,$vehicle->getId(),$destinyState->getId(),$destinyCity->getId());
+                 $countShipmentsNotification= count($this->view->shipmentsNotification);
+                
+                 if ($countShipmentsNotification != 0)
+                 {
+                     foreach ($this->view->shipmentsNotification as $key)
+                     {
+                        $this->view->idNotification= $key['Id_Notification'];
+                     }
+                      
+                     $em = $this->getEntityManager('DefaultDb');
+                     $notificationEventPanel = new DefaultDb_Entity_EventPanel();
+                     $notificationEventPanel->setEvent('shipments');
+                     $notificationEventPanel->setIdEvent($shipment->getId());
+                     $notificationEventPanel->setCreationDate($shipment->getSourceDate());
+                     $notificationEventPanel->setStatus('0');
+                     $notificationEventPanel->setDataHidden('0');
+                     $notificationEventPanel->setCoincidenceEvent('3');
+                     $notificationEventPanel->setCoincidenceNumber($this->view->idNotification);
+                     $em->persist($notificationEventPanel);
+                     $em->flush();
+                 }
+                  
+            
+           /////////////////////////////////////////////////////////////////////
            //           
            //           E::N::V::I::O::  C::O::R::R::E::O
            //
@@ -176,7 +237,89 @@ class Agent_ShipmentController extends Model3_Controller
            // ActionType:  1(Shipment), 2(Routes)                             //
            /////////////////////////////////////////////////////////////////////
          
+             $notification = $em->getRepository('DefaultDb_Entity_Notification');
+            $actiontype='1';
+            $this->view->email =  $notification->getEmailForSend($actiontype,$vehicle->getId(),$destinyState->getId(),$destinyCity->getId());
+            $countEmail= count($this->view->email);
             
+            if ($countEmail !=0)
+            { 
+                foreach ($this->view->email as $var)
+                {
+                    $this->view->idofnotification.=$var['id'];
+                    $this->view->emailforuser.=$var['email'];
+                    $this->view->notificationdate=$var['Notification_Date_Format'];
+                }
+                     
+                $shipments = $em->getRepository('DefaultDb_Entity_Shipment');
+                $this->view->shipments =  $shipments->getNotificationForShipments($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$this->view->notificationdate);
+                $countShipments= count($this->view->shipments);
+                    
+                if ($countShipments !=0)
+                {
+                list ($typeText,$eventText)=$shipment->getTypeText();
+                
+                    foreach ($this->view->shipments as $key)
+                    {
+                        $this->view->idShipments.= $key['Shipments_Id'].'<br />';
+                        $this->view->destinyShipments.=$key['City_Destiny_Name'].' , '.$key['State_Destiny_Name'].'<br />';
+                        $this->view->originShipments.=$key['City_Origin_Name'].' , '.$key['State_Origin_Name'].'<br />';
+                        $this->view->vehicleShipments.=$key['Vehicle_Name'].' De '.$key['Vehicle_Type_Name'].'<br />';
+                        $this->view->Date.=$key['New_Availability_Date'].'<br />';
+                        $this->view->Comments.= $key['Comment'].'<br />';
+                    }
+                    
+                    $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                    <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
+                    <p style="font-family:Arial;font-size:12px;line-height:16px;">
+                    <strong>Tenemos '.$countShipments.' '.$typeText.' de tu inter&eacute;s que est&aacute;n disponibles.</strong><br /><br />
+                    <table border="1" cellpadding="3" cellspacing="3" style="font-size:12px;">
+                        <tr>
+                            <td align="center"><strong>'.$typeText.' No.</strong></td>
+                            <td align="center"><strong>Origen</strong></td>
+                            <td align="center"><strong>Destino</strong></td>
+                            <td align="center"><strong>Veh&iacute;culo</strong></td>
+                            <td align="center"><strong>Disponible Hasta</strong></td>
+                            <td align="center"><strong>Comentarios</strong></td>
+                        </tr>
+                        <tr>
+                            <td align="center"> '.$this->view->idShipments.'</td>
+                            <td> '.$this->view->originShipments.'</td>
+                            <td> '.$this->view->destinyShipments.'</td>
+                            <td> '.$this->view->vehicleShipments.'</td>
+                            <td> '.$this->view->Date.'</td>
+                            <td> '.$this->view->Comments.'</td>
+                        </tr>
+                    </table><br />
+                    <strong>Otros clientes interesados en estas '.$typeText.' tambi&eacute;n han sido notificados.</strong><br /><br />
+                    <strong>Si deseas ser notificado de otras rutas por favor, cont&aacute;ctanos.</strong><br /><br />
+                    <strong>De interesarte alguna de ellas contacta a tu coordinador o comun&iacute;cate a los siguientes tel&eacute;fonos:</strong><br />
+                    <strong>Nextel: 62 * 179099 *5 &oacute; *2 &oacute; al 01 - 444 - 2571546 con Arturo Mac&iacute;as</strong><br />
+                    <strong>Oficina: 01 - 444 - 8240764 Con Cesar Castillo</strong><br />
+                    <strong>Oficina: 01 - 444 - 8240647</strong><br />
+                    <strong>Correo : masfletes@masfletes.com</strong><br /><br />
+                    </p></body></html>';
+                                
+                            
+                    $mail = new PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->Host = 'mail.masdistribucion.com.mx';
+                    $mail->Port = 587;
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'admin@masdistribucion.com.mx';
+                    $mail->Password = 'distribucion2900';
+                    $mail->From = 'administrador@masfletes.com';
+                    $mail->FromName = 'MasFletes.Com';
+                    $mail->AddAddress($emailAgent,'Coordinador');
+                   /* foreach (explode(',', $this->view->emailforuser) as $varx)
+                    {
+                    $mail->AddAddress($varx);
+                    }*/
+                    $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
+                    $mail->MsgHTML($correo);
+                    $mail->Send();
+                }
+            }
             
             ////////////////////////////////////////////////////////////////////
             //                                                                //
@@ -260,7 +403,7 @@ class Agent_ShipmentController extends Model3_Controller
                 <strong>* Carga No.:'.$shipment->getId().'<br />
                 <strong>* De:  </strong>'.$sourceCity->getName().' , '.$sourceState->getName().'<br />
                 <strong>* A:  </strong>'.$destinyCity->getName().' , '.$destinyState->getName().'<br />
-                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br /><br />
+                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
                 <strong>**************************************************************************************</strong><br />							
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
