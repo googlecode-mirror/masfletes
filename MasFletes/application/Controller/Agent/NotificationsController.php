@@ -100,8 +100,8 @@ class Agent_NotificationsController extends Model3_Controller
                 $emailAgent = $value['username'];
             }
             
-           // $emnot = $this->getEntityManager('DefaultDb');
-           // $event_panel = new DefaultDb_Entity_EventPanel();
+           $emnot = $this->getEntityManager('DefaultDb');
+           $event_panel = new DefaultDb_Entity_EventPanel();
            
             if ($action==1)
             {
@@ -126,7 +126,7 @@ class Agent_NotificationsController extends Model3_Controller
                         $this->view->Comments.= $key['Comment'].'<br />';
                     }
                                     
-                /*    $event_panel->setEvent('notifications');
+                    $event_panel->setEvent('notifications');
                     $event_panel->setIdEvent($notification->getId());
                     $event_panel->setCreationDate($notification->getNotificationDate());
                     $event_panel->setStatus('0');
@@ -134,7 +134,7 @@ class Agent_NotificationsController extends Model3_Controller
                     $event_panel->setCoincidenceEvent('1');
                     $event_panel->setCoincidenceNumber($this->view->idShipment);
                     $emnot->persist($event_panel);
-                    $emnot->flush();*/
+                    $emnot->flush();
                                
                     $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
                             <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
@@ -209,7 +209,7 @@ class Agent_NotificationsController extends Model3_Controller
                         $this->view->Comments.= $key['Comment'].'<br />';
                     }
                                 
-                  /*  $event_panel->setEvent('notifications');
+                    $event_panel->setEvent('notifications');
                     $event_panel->setIdEvent($notification->getId());
                     $event_panel->setCreationDate($notification->getNotificationDate());
                     $event_panel->setStatus('0');
@@ -217,7 +217,7 @@ class Agent_NotificationsController extends Model3_Controller
                     $event_panel->setCoincidenceEvent('2');
                     $event_panel->setCoincidenceNumber($this->view->idRoute);
                     $emnot->persist($event_panel);
-                    $emnot->flush();*/
+                    $emnot->flush();
 
                                     
                              

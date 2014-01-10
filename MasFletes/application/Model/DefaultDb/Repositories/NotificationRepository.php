@@ -12,7 +12,6 @@ class DefaultDb_Repositories_NotificationRepository extends EntityRepository
        $result = $cnx->executeQuery('SELECT 
                                      action_type, 
                                      id, 
-                                     email,
                                      notification_date,
                                      DATE (notification_date) AS Notification_Date_Format
                                      FROM notifications 
@@ -51,7 +50,6 @@ class DefaultDb_Repositories_NotificationRepository extends EntityRepository
                         DATE (notification_date) AS Notification_Date_Format,
                         user_id,
                         action_type,
-                        email,
                         municipality_destiny_id,
                         state_destiny_id,
                         municipality_origin_id,
