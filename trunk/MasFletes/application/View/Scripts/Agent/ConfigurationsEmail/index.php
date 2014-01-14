@@ -5,6 +5,9 @@
         <td><b><h3>::: Configuraciones de Env&iacute;o de Correos :::</h3></b></td>
     </tr>
     </table>
+    <?php if( ($resp = Model3_Site::getTempMsg("msg")) ) { ?>
+        <div class="alert alert-success"><?php echo $resp; ?></div>
+    <?php } ?>
    
     <div class="alert alert-info"> Aqu&iacute; podr&aacute;s configurar los correo que son enviados a tu cuenta de email.</div>
     

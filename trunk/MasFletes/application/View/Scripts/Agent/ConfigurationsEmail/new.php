@@ -6,6 +6,6 @@
     </tr>
     </table>
         
- <?php echo $view->updateOptionsConfigurations; ?>
+    <?php echo $view->updateOptionsConfigurations; ?>
     
 </div>

@@ -31,18 +31,12 @@ class Agent_ConfigurationsEmailController extends Model3_Controller
             $email=$post['emailAdd'];
             
             
-            $var=$updateConfiguration->updateOptionsConfigurations($email,$routes,$shipments,$notifications,$this->_credentials['id']);
-            
-            if ($var==1)
-               {
-                $this->view->updateOptionsConfigurations ="<div class='alert alert-success'>
-                                                          <br />La actualizaci&oacute;n se ha realizado con &eacute;xito<br /><br />
-                                                          </div>
-                                                          <script language='javascript'>
-                                                          window.location='".$this->view->url(array('controller' => 'ConfigurationsEmail', 'action' => 'index'))."'
-                                                          </script>";
-            } 
-             
+            $updateConfiguration->updateOptionsConfigurations($email,$routes,$shipments,$notifications,$this->_credentials['id']);
+           
+            $this->view->updateOptionsConfigurations ="<div class='alert alert-success'>La actualizaci&oacute;n se ha realizado con &eacute;xito</div>
+                                                       <script language='javascript'>
+                                                       window.location='".$this->view->url(array('controller' => 'ConfigurationsEmail', 'action' => 'index'))."'
+                                                       </script>";
         } 
         
     }

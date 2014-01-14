@@ -42,6 +42,16 @@ class Admin_UsersController extends Model3_Controller
             $em->persist($user);
             $em->flush();
             
+            $configuration = new DefaultDb_Entity_ConfigurationEmail();
+            $configuration->setUserId($user->getId());
+            $configuration->setEmail('');
+            $configuration->setSendRoutes('0');
+            $configuration->setSendShipments('0');
+            $configuration->setSendNotifications('0');
+                    
+            $em->persist($configuration);
+            $em->flush();
+            
             Model3_Site::setTempMsg("msg", "El usuario se ha creado correctamente");
             $this->redirect ('Admin/Users/add');
         }
