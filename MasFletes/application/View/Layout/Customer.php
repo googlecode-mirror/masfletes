@@ -119,6 +119,13 @@
                                         <li><a href="<?php echo $view->url(array('controller' => 'Notifications', 'action' => 'form')); ?>">Crear</a></li>
                                     </ul>
                                 </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Perfil<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                         <li><a href="<?php echo $view->url(array('controller' => 'ConfigurationsEmail', 'action' => 'index')); ?>">Configuraciones</a></li>
+                                         <li><a href="<?php echo $view->url(array('controller' => 'MyPanel', 'action' => 'index')); ?>">Eventos Recientes</a></li>
+                                    </ul>
+                                </li>
 <!--                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">MasFletes.com <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
