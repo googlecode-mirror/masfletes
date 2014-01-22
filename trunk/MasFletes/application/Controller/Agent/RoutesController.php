@@ -307,7 +307,7 @@ class Agent_RoutesController extends Model3_Controller
                         $mail->From = 'administrador@masfletes.com';
                         $mail->FromName = 'MasFletes.Com';
                         $mail->AddAddress($emailAgent,'Coordinador');
-                       /* foreach (explode(',', $this->view->emailforuser) as $varx)
+                        /* foreach (explode(',', $this->view->emailforuser) as $varx)
                         {
                         $mail->AddAddress($varx);
                         }*/
@@ -316,16 +316,33 @@ class Agent_RoutesController extends Model3_Controller
                         $mail->Send();
                     }
                 }
+                
+            //////////////////////////////////////
+            //                                  //
+            // ::: CONFIGURATIONS :::           //
+            //                                  //
+            /////////////////////////////////////
+                
+            $resultConfiguration = $em->getRepository('DefaultDb_Entity_ConfigurationEmail');
+            $this->view->resultConfiguration =  $resultConfiguration->getDetailsConfigurations($this->_credentials['id']);
+                 
+            while ($rowConfigurations = $this->view->resultConfiguration ->fetch(PDO::FETCH_ASSOC))
+            {
+                $shipmentsConfig=$rowConfigurations['send_shipments'];  
+                $emailAdd=$rowConfigurations['email'];  
+            }
             
             ////////////////////////////////////////////////////////////////////
             //                                                                //
             // BUSQUEDA DE CARGAS QUE COINCIDEN O NO CON   RUTA               //                                                         
             //                                                                //                                                
             ////////////////////////////////////////////////////////////////////
+            if ($shipmentsConfig==0)
+            {
             
-            $coincide = $em->getRepository('DefaultDb_Entity_Shipment');
-            $this->view->coincide =  $coincide->getNotificationForShipments($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$date);
-            $countShipments= count($this->view->coincide);
+                $coincide = $em->getRepository('DefaultDb_Entity_Shipment');
+                $this->view->coincide =  $coincide->getNotificationForShipments($vehicle->getId(),$destinyState->getId(),$destinyCity->getId(),$date);
+                $countShipments= count($this->view->coincide);
             
             
             //////////////////////////////////////////////////////////////////// 
@@ -335,41 +352,45 @@ class Agent_RoutesController extends Model3_Controller
             //                                                                //
             //////////////////////////////////////////////////////////////////// 
             
-            if ( $countShipments<=0)
-            {
-                list ($typeText,$eventText)=$route->getTypeText();
-                    
-                $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
-                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
-                <p style="font-family:Arial;font-size:13px;line-height:16px;">
-                <strong>Un usuario acaba de registrar una '.$typeText.' con estos datos:</strong><br /><br />
-                <strong>* '.$typeText.' n&uacute;mero:  </strong>'.$route->getId().'<br />
-                <strong>* De:  </strong>'.utf8_decode($sourceCity->getName().' , '.$sourceState->getName()).'<br />
-                <strong>* A:  </strong>'.utf8_decode($destinyCity->getName().' , '.$destinyState->getName()).'<br />
-                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
-                <strong>* Fecha Disponible:  </strong>'.$date.'<br />
-                <strong>* Comentarios:  </strong>'.$route->getComments().'<br /><br />
-                <strong>* NOTA: Por el momento ninguna de nuestras opciones arrojan resultados con los datos de esta '.$typeText.'.  **</strong> <br /> <br />										
-                <strong>'.$this->view->messageZone.'</strong><br />
-                <strong>Gracias por utilizar MasFletes.</strong><br />
-                <strong>www.masfletes.com</strong><br /><br />
-                </p></body></html>';
-                    
-                $mail = new PHPMailer();
-                $mail->IsSMTP();
-                $mail->Host = 'mail.masdistribucion.com.mx';
-                $mail->Port = 587;
-                $mail->SMTPAuth = true;
-                $mail->Username = 'admin@masdistribucion.com.mx';
-                $mail->Password = 'distribucion2900';
-                $mail->From = 'admin@masdistribucion.com.mx';
-                $mail->FromName = 'Notificaciones de Mas Fletes';
-                $mail->AddAddress($emailAgent,'Coordinador');
-                $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
-                $mail->MsgHTML($correo);
-                $mail->Send();
-            }
-            
+                if ( $countShipments<=0)
+                {
+                    list ($typeText,$eventText)=$route->getTypeText();
+
+                    $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                    <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
+                    <p style="font-family:Arial;font-size:13px;line-height:16px;">
+                    <strong>Un usuario acaba de registrar una '.$typeText.' con estos datos:</strong><br /><br />
+                    <strong>* '.$typeText.' n&uacute;mero:  </strong>'.$route->getId().'<br />
+                    <strong>* De:  </strong>'.utf8_decode($sourceCity->getName().' , '.$sourceState->getName()).'<br />
+                    <strong>* A:  </strong>'.utf8_decode($destinyCity->getName().' , '.$destinyState->getName()).'<br />
+                    <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
+                    <strong>* Fecha Disponible:  </strong>'.$date.'<br />
+                    <strong>* Comentarios:  </strong>'.$route->getComments().'<br /><br />
+                    <strong>* NOTA: Por el momento ninguna de nuestras opciones arrojan resultados con los datos de esta '.$typeText.'.  **</strong> <br /> <br />										
+                    <strong>'.$this->view->messageZone.'</strong><br />
+                    <strong>Gracias por utilizar MasFletes.</strong><br />
+                    <strong>www.masfletes.com</strong><br /><br />
+                    </p></body></html>';
+
+                    $mail = new PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->Host = 'mail.masdistribucion.com.mx';
+                    $mail->Port = 587;
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'admin@masdistribucion.com.mx';
+                    $mail->Password = 'distribucion2900';
+                    $mail->From = 'admin@masdistribucion.com.mx';
+                    $mail->FromName = 'Notificaciones de Mas Fletes';
+                    $mail->AddAddress($emailAgent,'Coordinador');
+                    if ($emailAdd != "")
+                        { 
+                             $mail->AddBCC(''.$emailAdd.'',"Usuario Mas Fletes");
+                        }   
+                    $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
+                    $mail->MsgHTML($correo);
+                    $mail->Send();
+                }
+
             
             //////////////////////////////////////////////////////////////////// 
             //                                                                //
@@ -378,65 +399,70 @@ class Agent_RoutesController extends Model3_Controller
             //                                                                //
             //////////////////////////////////////////////////////////////////// 
            
-            if ($countShipments !=0)
-            {
-                foreach ($this->view->coincide as $key)
+                if ($countShipments !=0)
                 {
-                    $this->view->idShipments.= $key['Shipments_Id'].'<br />'; 
-                    $this->view->emailShipments.= $key['contact_name'].'<br />';
-                    $this->view->comShipments.= $key['Comment'].'<br />';
-                    $this->view->dateShipments.= $key['New_Availability_Date'].'<br />';
+                    foreach ($this->view->coincide as $key)
+                    {
+                        $this->view->idShipments.= $key['Shipments_Id'].'<br />'; 
+                        $this->view->emailShipments.= $key['contact_name'].'<br />';
+                        $this->view->comShipments.= $key['Comment'].'<br />';
+                        $this->view->dateShipments.= $key['New_Availability_Date'].'<br />';
+                    }
+
+                    list ($typeText,$eventText)=$route->getTypeText();
+
+                    $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                    <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
+                    <p style="font-family:Arial;font-size:13px;line-height:16px;">
+                    <strong>Se encontraron las siguientes '.$eventText.' que coinciden con la publicaci&oacute;n de un usuario, los detalles son: </strong><br />
+                    <strong>* Correo: </strong><br /><br />
+                    <strong>Por favor contactar con los correos electronicos que aparecen acontinuaci&oacute;n:</strong><br /><br />
+                    <strong>INFORMACI&Oacute;N GENERAL</strong><br />
+                    <strong>**************************************************************************************</strong><br />
+                    <strong>* Ruta No.:'.$route->getId().'<br />
+                    <strong>* De:  </strong>'.utf8_decode($sourceCity->getName().' , '.$sourceState->getName()).'<br />
+                    <strong>* A:  </strong>'.utf8_decode($destinyCity->getName().' , '.$destinyState->getName()).'<br />
+                    <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
+                    <strong>**************************************************************************************</strong><br />							
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td align="center"><strong>Carga</strong></td>
+                            <td align="center"><strong>Correo</strong></td>
+                            <td align="center"><strong>Comentario</strong></td>
+                            <td align="center"><strong>Fecha Carga</strong></td>
+                        </tr>
+                        <tr>
+                            <td> '.$this->view->idShipments.'</td>
+                            <td> '.$this->view->emailShipments.'</td>
+                            <td> '.$this->view->comShipments.'</td>
+                            <td> '.$this->view->dateShipments.'</td>
+                        </tr>
+                    </table><br /><br />
+                    <strong>'.$this->view->messageZone.'</strong><br />
+                    <strong>'.$this->view->detailsZone.'</strong><br />
+                    <strong>Gracias por utilizar MasFletes.</strong><br />
+                    <strong>www.masfletes.com</strong><br /><br />
+                    </p></body></html>';
+
+                    $mail = new PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->Host = 'mail.masdistribucion.com.mx';
+                    $mail->Port = 587;
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'admin@masdistribucion.com.mx';
+                    $mail->Password = 'distribucion2900';
+                    $mail->From = 'admin@masdistribucion.com.mx';
+                    $mail->FromName = 'Notificaciones de Mas Fletes';
+                    $mail->AddAddress($emailAgent,'Coordinador');
+                    if ($emailAdd != "")
+                        { 
+                             $mail->AddBCC(''.$emailAdd.'',"Usuario Mas Fletes");
+                        }   
+                    $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
+                    $mail->MsgHTML($correo);
+                    $mail->Send();
                 }
-                    
-                list ($typeText,$eventText)=$route->getTypeText();
-		
-                $correo='<html><head></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
-                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
-                <p style="font-family:Arial;font-size:13px;line-height:16px;">
-                <strong>Se encontraron las siguientes '.$eventText.' que coinciden con la publicaci&oacute;n de un usuario, los detalles son: </strong><br />
-                <strong>* Correo: </strong><br /><br />
-                <strong>Por favor contactar con los correos electronicos que aparecen acontinuaci&oacute;n:</strong><br /><br />
-		<strong>INFORMACI&Oacute;N GENERAL</strong><br />
-                <strong>**************************************************************************************</strong><br />
-                <strong>* Ruta No.:'.$route->getId().'<br />
-                <strong>* De:  </strong>'.utf8_decode($sourceCity->getName().' , '.$sourceState->getName()).'<br />
-                <strong>* A:  </strong>'.utf8_decode($destinyCity->getName().' , '.$destinyState->getName()).'<br />
-                <strong>* Con Veh&iacute;culo:  </strong> '.$vehicle->getName().' , '.$vehicleType->getName().'<br />
-                <strong>**************************************************************************************</strong><br />							
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td align="center"><strong>Carga</strong></td>
-                        <td align="center"><strong>Correo</strong></td>
-                        <td align="center"><strong>Comentario</strong></td>
-                        <td align="center"><strong>Fecha Carga</strong></td>
-                    </tr>
-                    <tr>
-                        <td> '.$this->view->idShipments.'</td>
-                        <td> '.$this->view->emailShipments.'</td>
-                        <td> '.$this->view->comShipments.'</td>
-                        <td> '.$this->view->dateShipments.'</td>
-                    </tr>
-                </table><br /><br />
-                <strong>'.$this->view->messageZone.'</strong><br />
-                <strong>'.$this->view->detailsZone.'</strong><br />
-                <strong>Gracias por utilizar MasFletes.</strong><br />
-                <strong>www.masfletes.com</strong><br /><br />
-                </p></body></html>';
-                        
-                $mail = new PHPMailer();
-                $mail->IsSMTP();
-                $mail->Host = 'mail.masdistribucion.com.mx';
-                $mail->Port = 587;
-                $mail->SMTPAuth = true;
-                $mail->Username = 'admin@masdistribucion.com.mx';
-                $mail->Password = 'distribucion2900';
-                $mail->From = 'admin@masdistribucion.com.mx';
-                $mail->FromName = 'Notificaciones de Mas Fletes';
-                $mail->AddAddress($emailAgent,'Coordinador');
-                $mail->Subject = 'Notificaciones de '.$typeText.' de Mas Fletes';
-                $mail->MsgHTML($correo);
-                $mail->Send();
-                }
+            }
             
             if( is_null($this->view->dataRequest) )
                 Model3_Site::setTempMsg("msg", "La ruta ha sido registrada correctamente");
