@@ -78,9 +78,10 @@
                                 <?php
                                 $auth = new Model3_Auth();
                                 ?>
-                                <a href="#" class="navbar-link"><?php echo $auth->getCredentials('username');?></a>
-                                &nbsp; - &nbsp;
-                                <a href="<?php echo $view->getBaseUrl(); ?>/Index/index/logout/1" class="navbar-link">Salir</a>
+                                <!--a href="#" class="navbar-link"><?php echo $auth->getCredentials('username');?></a-->
+                                &nbsp;&nbsp;
+                                <!--a href="<?php echo $view->getBaseUrl(); ?>/Index/index/logout/1" class="navbar-link">Salir</a-->
+                                <a href="<?php echo $view->getBaseUrl(); ?>/Index/index/logout/1" class="navbar-link"><span class="icon-off"></span>&nbsp;Salir</a>
                             </p>
                             <ul class="nav">
                                 <li><a href="<?php echo $view->url(array('module' => 'Customer')); ?>">Inicio</a></li>
@@ -120,10 +121,15 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Eventos<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                         <li><a href="<?php echo $view->url(array('controller' => 'MyPanel', 'action' => 'index')); ?>">Eventos Recientes</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Perfil<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                          <li><a href="<?php echo $view->url(array('controller' => 'ConfigurationsEmail', 'action' => 'index')); ?>">Configuraciones</a></li>
-                                         <li><a href="<?php echo $view->url(array('controller' => 'MyPanel', 'action' => 'index')); ?>">Eventos Recientes</a></li>
                                     </ul>
                                 </li>
 <!--                                <li class="dropdown">

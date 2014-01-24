@@ -156,13 +156,13 @@ class DefaultDb_Repositories_EventPanelRepository extends EntityRepository
     {
         $cnx = $this->getEntityManager()->getConnection();
         $RoutesEvent = $cnx->executeQuery("SELECT
-                    DATE_ADD( load_availability_date, INTERVAL effective_days DAY ),
+                    DATE_ADD( load_availability_date, INTERVAL effective_days DAY ) AS D,
                     routes.id AS Route_Id, 
                     routes.email, 
                     routes.user_id, 
                     routes.load_availability_date AS Availability_Date_Route, 
                     DATE_FORMAT(routes.load_availability_date,GET_FORMAT(DATE, 'EUR')) AS Availability_Date,
-                    DATE_FORMAT( DATE_ADD( load_availability_date, INTERVAL effective_days DAY) ,GET_FORMAT(DATE, 'EUR')) AS New_Availability_Date,
+                    DATE_FORMAT( DATE_ADD(load_availability_date, INTERVAL effective_days DAY) ,GET_FORMAT(DATE, 'ISO')) AS New_Availability_Date,
                     routes.comments AS Comment, 
                     routes.vehicle_id AS Vehicle_Id, 
                     routes.vehicleType_id AS Vehicle_Type_Id, 

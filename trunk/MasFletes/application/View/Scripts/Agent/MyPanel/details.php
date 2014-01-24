@@ -5,7 +5,7 @@
         <td><b><h3>::: Detalle de eventos :::</h3></b></td>
     </tr>
     </table>
- 
+    <a href="<?php echo $view->url(array('controller' => 'MyPanel', 'action' => 'index')); ?>">Volver</a><br /><br />
     <?php 
     echo $view->titleDetails;
     echo $view->Message;

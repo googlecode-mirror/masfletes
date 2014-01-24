@@ -119,25 +119,23 @@
         </thead>
         <tbody>
             <tr>
-                <td><label>Deseas recibir notificaciones en tu correo sobre las rutas que estan disponibles en MasFletes:</label> </td>
+                <td><label>Deseas recibir notificaciones en tu correo el&eacute;ctronico sobre las rutas que se registren en MasFletes:</label> </td>
                 <?php echo $routesView; ?>
             </tr>
             <tr>
-                <td> <label>Deseas recibir notificaciones en tu correo sobre las cargas que estan disponibles en MasFletes:</label></td>
+                <td> <label>Deseas recibir notificaciones en tu correo el&eacute;ctronico sobre las cargas que se registren en MasFletes:</label></td>
                 <?php echo $shipmentsView; ?>
             </tr>
             <tr>
                 <td>
-                     <label>Deseas recibir informaci&oacute;n sobre las notificaciones que creaste en tu correo el&eacute;ctronico:</label>
+                     <label>Deseas recibir en tu correo el&eacute;ctronico informaci&oacute;n que coincida con las notificaciones que creaste:</label>
                </td>
                <?php echo $notificationsView; ?>
             </tr>
             <tr>
                 <td>
                     <label>Deseas ingresar una cuenta de correo adicional para que se te envien tus notificaciones o modificar la actual: <b><< <?php echo $email; ?> >></b></label>
-                    
-
-                </td>
+               </td>
                    
                 <td colspan="2">
                     <?php echo $emailView; ?>

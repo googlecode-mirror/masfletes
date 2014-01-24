@@ -24,6 +24,12 @@ class DefaultDb_Entity_State
      * @OneToMany(targetEntity="DefaultDb_Entity_City", mappedBy="state")
      * */
     private $cities;
+    
+    /**
+     * @Column
+     * @var string
+     */
+    private $abbreviation;
 
     public function setName($name)
     {
@@ -44,5 +50,8 @@ class DefaultDb_Entity_State
     {
         return $this->cities;
     }
-
+     public function getAbbrev()
+    {
+        return $this->abbreviation;
+    }
 }
