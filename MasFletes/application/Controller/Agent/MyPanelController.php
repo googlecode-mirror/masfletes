@@ -268,7 +268,7 @@ class Agent_MyPanelController extends Model3_Controller
         if ($Event=='routes')
         {
         $this->view->titleDetails="<h5>::: Rutas que coinciden con cargas disponibles :::</h5><br />";
-        $this->view->Message =  "La <b>Ruta No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
+        $this->view->Message =  "La <b>Ruta No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
         $this->view->Head =  "Carga";
         
             for($i=0;$i<count($array);$i++)
@@ -291,7 +291,7 @@ class Agent_MyPanelController extends Model3_Controller
         if ($Event=='shipments')
         {
         $this->view->titleDetails="<h5>::: Cargas que coinciden con rutas disponibles :::</h5><br />";
-        $this->view->Message =  "La <b>Carga No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
+        $this->view->Message =  "La <b>Carga No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
         $this->view->Head =  "Ruta";
         
             for($i=0;$i<count($array);$i++)
@@ -305,7 +305,6 @@ class Agent_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyRoutes=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleRoutes=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateRoutes=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td><br /></td>'
                     .'<td>'.$this->view->CommentsRoutes= $value['Comment'].'<br /></td>'
                     .'<td>'.$this->view->contactUserRoutes= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
                 }
@@ -315,7 +314,7 @@ class Agent_MyPanelController extends Model3_Controller
         if ($Event=='notifications' && $CoincidenceEvent == 1)
         {
         $this->view->titleDetails="<h5>::: Notificaciones que coinciden con una carga :::</h5><br />";
-        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
+        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
         $this->view->Head =  "Carga";
         
             for($i=0;$i<count($array);$i++)
@@ -338,7 +337,7 @@ class Agent_MyPanelController extends Model3_Controller
         if ($Event=='notifications' && $CoincidenceEvent == 2)
         {
         $this->view->titleDetails="<h5>::: Notificaciones que coinciden conuna unidad de transporte disponible :::</h5><br />";
-        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
+        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
         $this->view->Head =  "Ruta";
         
             for($i=0;$i<count($array);$i++)
@@ -352,7 +351,6 @@ class Agent_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyRoutesCoincidence=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleRoutesCoincidence=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateRoutes=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td><br /></td>'
                     .'<td>'.$this->view->CommentsRoutesCoincidence= $value['Comment'].'<br /></td>'
                     .'<td>'.$this->view->contactUserRoutesCoincidence= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
                 }

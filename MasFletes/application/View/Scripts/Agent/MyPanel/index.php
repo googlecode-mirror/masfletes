@@ -43,6 +43,7 @@
             <?php echo $view->notificationsPanel; ?>
         </tbody>
     </table>
+    <div style="font-size: 10px;">
     <b>Glosario de Identificadores:</b>
     <br />
     <b>CR:</b> (Carga que coincide con una Ruta) + N&uacute;mero consecutivo
@@ -53,5 +54,6 @@
     <br />
     <b>CN:</b> (Carga que coincide con una notificaci&oacute;n) + N&uacute;mero consecutivo
     <br />
-    <b>NC o NR:</b> (Notificaci&oacute;n que coincide con una carga o ruta) + N&uacute;mero consecutivo
+    <b>NC o NR:</b> (Notificaci&oacute;n que coincide con una carga o ruta) + N&uacute;mero 
+    </div>
 </div>

@@ -1,6 +1,6 @@
 <?php /* @var $view Model3_View */ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta http-equiv="Content-type" content="text/html;charset=utf-8" />
         <meta charset="utf-8">
