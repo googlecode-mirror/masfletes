@@ -32,8 +32,8 @@ class View_Helper_Routes extends Model3_View_Helper
                     ?>
                     <tr>
                         <td><?php echo $route->getId(); ?></td>
-                        <td><?php echo utf8_decode($route->getMunicipalityOrigin()->getName() . ', ' . $route->getStateOrigin()->getName()); ?></td>
-                        <td><?php echo utf8_decode($route->getMunicipalityDestiny()->getName() . ', ' . $route->getStateDestiny()->getName()); ?></td>
+                        <td><?php echo utf8_decode($route->getMunicipalityOrigin()->getName() . ', ' . $route->getStateOrigin()->getAbbrev()); ?></td>
+                        <td><?php echo utf8_decode($route->getMunicipalityDestiny()->getName() . ', ' . $route->getStateDestiny()->getAbbrev()); ?></td>
                         <td><?php echo $route->getLoadAvailabilityDate()->format('d-m-Y'); ?></td>
                         <td><?php echo $route->getEffectiveDays(); ?></td>
                         <td><?php echo $route->getVehicle()->getName(); ?></td>
