@@ -22,7 +22,6 @@
                 <td><b>Veh&iacute;culo</b></td>
                 <td><b>Disponible</b></td>
                 <td><b>Comentarios</b></td>
-                <td><b>Usuario</b></td>
             </tr>
         </thead>
         <tbody>

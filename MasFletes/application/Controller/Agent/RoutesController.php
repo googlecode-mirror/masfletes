@@ -117,14 +117,14 @@ class Agent_RoutesController extends Model3_Controller
             {
                 foreach ($this->view->getShipment as $key)
                 {
-                    $this->view->idShipmen.= $key['Shipments_Id'].',';
+                    $this->view->idShipment.= $key['Shipments_Id'].',';
                 }
                     
                 $event_panel = new DefaultDb_Entity_EventPanel();
                 $event_panel->setEvent('routes');
                 $event_panel->setIdUser($this->_credentials['id']);
                 $event_panel->setIdEvent($route->getId());
-                $event_panel->setCoincidenceNumber($this->view->idShipmen);
+                $event_panel->setCoincidenceNumber($this->view->idShipment);
                 $event_panel->setCreationDate($route->getLoadAvailabilityDate());
                 $event_panel->setStatus('0');
                 $event_panel->setDataHidden('0');
@@ -147,7 +147,7 @@ class Agent_RoutesController extends Model3_Controller
                  {
                      foreach ($this->view->routesNotifications as $key)
                      {
-                     $this->view->idNotification= $key['Id_Notification'];
+                     $this->view->idNotification= $key['Id_Notification'].',';
                      }
                       
                      $em = $this->getEntityManager('DefaultDb');

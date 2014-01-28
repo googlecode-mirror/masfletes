@@ -12,8 +12,22 @@
  */
 class Customer_MyPanelController extends Model3_Controller
 {
+     private $_credentials;
+    
     public function init()
     {
+        if(!Model3_Auth::isAuth())
+            $this->redirect();
+        else
+        {
+            $role = Model3_Auth::getCredentials('type');
+            if( $role !== DefaultDb_Entity_User::TYPE_USER )
+            {
+               Model3_Auth::deleteCredentials();
+               $this->redirect();
+            }
+        }
+        $this->_credentials = Model3_Auth::getCredentials();
         $this->view->setTemplate('Customer');
     }
     
@@ -21,22 +35,22 @@ class Customer_MyPanelController extends Model3_Controller
     {
         $em = $this->getEntityManager('DefaultDb');
         $eventPanel = $em->getRepository('DefaultDb_Entity_EventPanel');
-        $this->view->eventPanelView =  $eventPanel->getEvent();
-    
-         $typeEventRoutes='routes';
-        $this->view->routesNoRead =  $eventPanel->getNoReadEvent($typeEventRoutes);
+       $this->view->eventPanelView =  $eventPanel->getEvent($this->_credentials['id']);
+        
+        $typeEventRoutes='routes';
+        $this->view->routesNoRead =  $eventPanel->getNoReadEvent($typeEventRoutes,$this->_credentials['id']);
         
         while ($value = $this->view->routesNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countRoutesNoRead=$value['Count_Event']; }
         
         $typeEventShipments='shipments';
-        $this->view->shipmentsNoRead =  $eventPanel->getNoReadEvent($typeEventShipments);
+        $this->view->shipmentsNoRead =  $eventPanel->getNoReadEvent($typeEventShipments,$this->_credentials['id']);
         
         while ($value = $this->view->shipmentsNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countShipmentsNoRead=$value['Count_Event'];    }
         
         $typeEventNotifications='notifications';
-        $this->view->notificationsNoRead =  $eventPanel->getNoReadEvent($typeEventNotifications);
+        $this->view->notificationsNoRead =  $eventPanel->getNoReadEvent($typeEventNotifications,$this->_credentials['id']);
         
         while ($value = $this->view->notificationsNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countNotificationsNoRead=$value['Count_Event'];   }
@@ -75,7 +89,7 @@ class Customer_MyPanelController extends Model3_Controller
                     <td><b>'.$this->view->alias.$this->view->idPanel.'</b><br /></td>'
                     . '<td><b>'.$this->view->availabilityDate.'</b><br /></td>'       
                     . '<td><b> La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' notificaci&oacute;n registrada que es: '. $this->view->countNumbertEvent.'</b></td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><span class="icon-remove"></span><br /></td>'
                     . '</tr>';
                 }
@@ -86,7 +100,7 @@ class Customer_MyPanelController extends Model3_Controller
                     . '<td>'.$this->view->alias.$this->view->idPanel.'<br /></td>'
                     . '<td>'.$this->view->availabilityDate.'<br /></td>'
                     . '<td>La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' Cargas que son: '.$this->view->countNumbertEvent.'</td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'idHidden' => ''.$this->view->idPanel.'', 'hi' => ''.$this->view->dataHidden.'')).'"><span class="icon-remove"></span></a><br /></td>'
                     . '</tr>';              
                 }    
@@ -105,7 +119,7 @@ class Customer_MyPanelController extends Model3_Controller
                     <td><b>'.$this->view->alias.$this->view->idPanel.'</b><br /></td>'
                     . '<td><b>'.$this->view->availabilityDate.'</b><br /></td>'       
                     . '<td><b> La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' Cargas que son: '.$this->view->countNumbertEvent.'</b></td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><span class="icon-remove"></span><br /></td>'
                     . '</tr>';
                 }
@@ -116,7 +130,7 @@ class Customer_MyPanelController extends Model3_Controller
                     . '<td>'.$this->view->alias.$this->view->idPanel.'<br /></td>'
                     . '<td>'.$this->view->availabilityDate.'<br /></td>'
                     . '<td>La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' Cargas que son: '.$this->view->countNumbertEvent.'</td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'idHidden' => ''.$this->view->idPanel.'', 'hi' => ''.$this->view->dataHidden.'')).'"><span class="icon-remove"></span></a><br /></td>'
                     . '</tr>';              
                 }    
@@ -134,7 +148,7 @@ class Customer_MyPanelController extends Model3_Controller
                     <td><b>'.$this->view->alias.$this->view->idPanel.'</b><br /></td>'
                     . '<td><b>'.$this->view->availabilityDate.'</b><br /></td>'
                     . '<td><b> La Carga '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' rutas que son: '.$this->view->countNumbertEvent.'</b></td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><span class="icon-remove"></span><br /></td>'
                     . '</tr>';
                 }
@@ -145,7 +159,7 @@ class Customer_MyPanelController extends Model3_Controller
                     . '<td>'.$this->view->alias.$this->view->idPanel.'<br /></td>'
                     . '<td>'.$this->view->availabilityDate.'<br /></td>'
                     . '<td>La Carga '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' rutas que son: '.$this->view->countNumbertEvent.'</td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'idHidden' => ''.$this->view->idPanel.'', 'hi' => ''.$this->view->dataHidden.'')).'"><span class="icon-remove"></span></a><br /></td>'
                     . '</tr>';
                 }
@@ -163,7 +177,7 @@ class Customer_MyPanelController extends Model3_Controller
                     <td><b>'.$this->view->alias.$this->view->idPanel.'</b><br /></td>'
                     . '<td><b>'.$this->view->availabilityDate.'</b><br /></td>'       
                     . '<td><b> La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' notificaci&oacute;n registrada que es la No.: '. $this->view->countNumbertEvent.'</b></td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-primary" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><span class="icon-remove"></span><br /></td>'
                     . '</tr>';
                 }
@@ -174,7 +188,7 @@ class Customer_MyPanelController extends Model3_Controller
                     . '<td>'.$this->view->alias.$this->view->idPanel.'<br /></td>'
                     . '<td>'.$this->view->availabilityDate.'<br /></td>'
                     . '<td>La Ruta '.$this->view->idEvent. ' registrada el '.$this->view->availabilityDate.' coincide con '.$key.' notificaci&oacute;n registradas que es la No.: '.$this->view->countNumbertEvent.'</td>'
-                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'', 'us' => ''.$this->view->contactUser.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
+                    . '<td><b><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'id' => ''.$this->view->idEvent.'', 'ev' => ''.$this->view->event.'', 'ne' => ''.$this->view->numberEvent.'', 'st' => ''.$this->view->status.'', 'pa' => ''.$this->view->idPanel.'')).'"><button class="btn btn-mini btn-info" type="button"><span class="icon-info-sign"></span>  M&aacute;s Detalles</button></a></b></td>'
                     . '<td><a href="'. $this->view->url(array('controller' => 'MyPanel', 'action' => 'details', 'idHidden' => ''.$this->view->idPanel.'', 'hi' => ''.$this->view->dataHidden.'')).'"><span class="icon-remove"></span></a><br /></td>'
                     . '</tr>';              
                 }    
@@ -234,8 +248,8 @@ class Customer_MyPanelController extends Model3_Controller
     $idPanel = $this->getRequest()->getParam("pa");
     $idHidden = $this->getRequest()->getParam("idHidden");
     $dataHidden = $this->getRequest()->getParam("hi");
-    $ContactUser = $this->getRequest()->getParam("us");   
-    $contactDetailsUser = str_replace("_"," ",$ContactUser);
+   // $ContactUser = $this->getRequest()->getParam("us");   
+   // $contactDetailsUser = str_replace("_"," ",$ContactUser);
     
     $em = $this->getEntityManager('DefaultDb');
     $updateStatusPanel = $em->getRepository('DefaultDb_Entity_EventPanel');
@@ -268,7 +282,7 @@ class Customer_MyPanelController extends Model3_Controller
         if ($Event=='routes')
         {
         $this->view->titleDetails="<h5>::: Rutas que coinciden con cargas disponibles :::</h5><br />";
-        $this->view->Message =  "La <b>Ruta No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
+        $this->view->Message =  "La <b>Ruta No. ".$idEvent."</b> que acabas de resgistrar coincide con las siguientes cargas:";
         $this->view->Head =  "Carga";
         
             for($i=0;$i<count($array);$i++)
@@ -282,8 +296,7 @@ class Customer_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyShipments=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleShipments=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateShipments=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td>'.$this->view->CommentsShipments= $value['Comment'].'<br /></td>'
-                    .'<td>'.$this->view->contactUserShipments= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
+                    .'<td>'.$this->view->CommentsShipments= $value['Comment'].'<br /></td></tr>';
                 }
             }
         }
@@ -291,7 +304,7 @@ class Customer_MyPanelController extends Model3_Controller
         if ($Event=='shipments')
         {
         $this->view->titleDetails="<h5>::: Cargas que coinciden con rutas disponibles :::</h5><br />";
-        $this->view->Message =  "La <b>Carga No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
+        $this->view->Message =  "La <b>Carga No. ".$idEvent."</b> que acabas de registrar coincide con las siguientes rutas:";
         $this->view->Head =  "Ruta";
         
             for($i=0;$i<count($array);$i++)
@@ -305,8 +318,7 @@ class Customer_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyRoutes=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleRoutes=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateRoutes=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td>'.$this->view->CommentsRoutes= $value['Comment'].'<br /></td>'
-                    .'<td>'.$this->view->contactUserRoutes= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
+                    .'<td>'.$this->view->CommentsRoutes= $value['Comment'].'<br /></td></tr>';
                 }
             }
         }
@@ -314,7 +326,7 @@ class Customer_MyPanelController extends Model3_Controller
         if ($Event=='notifications' && $CoincidenceEvent == 1)
         {
         $this->view->titleDetails="<h5>::: Notificaciones que coinciden con una carga :::</h5><br />";
-        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes cargas:";
+        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acabas de registrar coincide con las siguientes cargas:";
         $this->view->Head =  "Carga";
         
             for($i=0;$i<count($array);$i++)
@@ -328,8 +340,7 @@ class Customer_MyPanelController extends Model3_Controller
                     .'<td>'.$this->view->destinyShipmentsCoincidence=$value['City_Destiny_Name'].' , '.$value['State_D_Abbrev'].'<br /></td>'
                     .'<td>'.$this->view->vehicleShipmentsCoincidence=$value['Vehicle_Name'].' De '.$value['Vehicle_Type_Name'].'<br /></td>'
                     .'<td>'.$this->this->view->DateShipments=$value['New_Availability_Date'].'<br /></td>'
-                    .'<td>'.$this->view->CommentsShipmentsCoincidence= $value['Comment'].'<br /></td>'
-                    .'<td>'.$this->view->contactUserShipmentsCoincidence= $value['FirstName_User'].'  '.$value['LastName_User'].'<br /></td></tr>';
+                    .'<td>'.$this->view->CommentsShipmentsCoincidence= $value['Comment'].'<br /></td></tr>';
                 }
             }
         }
@@ -337,7 +348,7 @@ class Customer_MyPanelController extends Model3_Controller
         if ($Event=='notifications' && $CoincidenceEvent == 2)
         {
         $this->view->titleDetails="<h5>::: Notificaciones que coinciden conuna unidad de transporte disponible :::</h5><br />";
-        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acaba de ser registrada por el <b>usuario: ".$contactDetailsUser."</b>, coincide con las siguientes rutas:";
+        $this->view->Message =  "La <b>Notificaci&oacute;n No. ".$idEvent."</b> que acabas de registrar coincide con las siguientes rutas:";
         $this->view->Head =  "Ruta";
         
             for($i=0;$i<count($array);$i++)

@@ -12,8 +12,22 @@
  */
 class Agent_MyPanelController extends Model3_Controller
 {
+    private $_credentials;
+    
     public function init()
     {
+        if(!Model3_Auth::isAuth())
+            $this->redirect();
+        else
+        {
+            $role = Model3_Auth::getCredentials('type');
+            if( $role !== DefaultDb_Entity_User::TYPE_COORDINATOR )
+            {
+               Model3_Auth::deleteCredentials();
+               $this->redirect();
+            }
+        }
+        $this->_credentials = Model3_Auth::getCredentials();
         $this->view->setTemplate('Agent');
     }
     
@@ -21,22 +35,22 @@ class Agent_MyPanelController extends Model3_Controller
     {
         $em = $this->getEntityManager('DefaultDb');
         $eventPanel = $em->getRepository('DefaultDb_Entity_EventPanel');
-        $this->view->eventPanelView =  $eventPanel->getEvent();
-    
-         $typeEventRoutes='routes';
-        $this->view->routesNoRead =  $eventPanel->getNoReadEvent($typeEventRoutes);
+        $this->view->eventPanelView =  $eventPanel->getEvent($this->_credentials['id']);
+        
+        $typeEventRoutes='routes';
+        $this->view->routesNoRead =  $eventPanel->getNoReadEvent($typeEventRoutes,$this->_credentials['id']);
         
         while ($value = $this->view->routesNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countRoutesNoRead=$value['Count_Event']; }
         
         $typeEventShipments='shipments';
-        $this->view->shipmentsNoRead =  $eventPanel->getNoReadEvent($typeEventShipments);
+        $this->view->shipmentsNoRead =  $eventPanel->getNoReadEvent($typeEventShipments,$this->_credentials['id']);
         
         while ($value = $this->view->shipmentsNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countShipmentsNoRead=$value['Count_Event'];    }
         
         $typeEventNotifications='notifications';
-        $this->view->notificationsNoRead =  $eventPanel->getNoReadEvent($typeEventNotifications);
+        $this->view->notificationsNoRead =  $eventPanel->getNoReadEvent($typeEventNotifications,$this->_credentials['id']);
         
         while ($value = $this->view->notificationsNoRead->fetch(PDO::FETCH_ASSOC))
         {   $this->view->countNotificationsNoRead=$value['Count_Event'];   }
