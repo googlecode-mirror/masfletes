@@ -16,19 +16,19 @@ use Doctrine\ORM\Query;
 class DefaultDb_Repositories_EventPanelRepository extends EntityRepository
 {  
     
-     public function getEvent()
+     public function getEvent($user)
     {
         $cnx = $this->getEntityManager()->getConnection();
         $res = $cnx->executeQuery("SELECT event_panel.id, 
-                                    id_user, 
-                                    coincidence_number,
-                                    coincidence_event, 
-                                    id_event, 
-                                    event, 
-                                    status, 
-                                    creation_date, 
-                                    data_hidden, 
-                                    DATE_FORMAT(creation_date,GET_FORMAT(DATE, 'EUR')) AS Availability_Date,
+                                   id_user, 
+                                   coincidence_number,
+                                   coincidence_event, 
+                                   id_event, 
+                                   event, 
+                                   status, 
+                                   creation_date, 
+                                   data_hidden, 
+                                   DATE_FORMAT(creation_date,GET_FORMAT(DATE, 'EUR')) AS Availability_Date,
                                    users.username AS Email_User,
                                    users.first_name AS FirstName_User,
                                    users.last_name AS LastName_User,
@@ -36,18 +36,20 @@ class DefaultDb_Repositories_EventPanelRepository extends EntityRepository
                                    users.id AS Id_User
                                    FROM event_panel 
                                    LEFT JOIN users ON ( event_panel.id_user = users.id)
+                                   WHERE id_user = '".$user."'
                                    ORDER BY event_panel.id DESC");
         return $res;
     }
     
     
-    public function getNoReadEvent($typeEvent)
+    public function getNoReadEvent($typeEvent,$user)
     {
         $cnx = $this->getEntityManager()->getConnection();
         $readEvent = $cnx->executeQuery("SELECT event, COUNT( * ) AS Count_Event
                                     FROM event_panel
                                     WHERE STATUS =  '0'
                                     AND event = '".$typeEvent."'
+                                    AND id_user = '".$user."'
                                     GROUP BY event");
         return $readEvent;
     }

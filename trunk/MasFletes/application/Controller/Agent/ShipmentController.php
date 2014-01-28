@@ -209,7 +209,7 @@ class Agent_ShipmentController extends Model3_Controller
                  {
                      foreach ($this->view->shipmentsNotification as $key)
                      {
-                        $this->view->idNotification= $key['Id_Notification'];
+                        $this->view->idNotification= $key['Id_Notification'].',';
                      }
                       
                      $em = $this->getEntityManager('DefaultDb');

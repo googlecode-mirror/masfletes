@@ -16,7 +16,7 @@ class DefaultDb_Repositories_UserRepository extends EntityRepository
     public function getEmailContact()
     {
          $cnx = $this->getEntityManager()->getConnection();
-       $contact = $cnx->executeQuery('SELECT id, email, first_name, last_name, type 
+       $contact = $cnx->executeQuery('SELECT id, first_name, last_name, type, username 
                                             FROM users WHERE type=3
                                             ORDER BY first_name DESC');
 
@@ -31,6 +31,16 @@ class DefaultDb_Repositories_UserRepository extends EntityRepository
 
        return $emailUser;
     } 
+    
+    public function getEmailCordinator()
+    {
+       $cnx = $this->getEntityManager()->getConnection();
+       $agent = $cnx->executeQuery('SELECT id, first_name, last_name, type, username 
+                                            FROM users WHERE type=2');
+
+       return $agent->fetchAll();
+    }
+    
 }
 
 ?>
