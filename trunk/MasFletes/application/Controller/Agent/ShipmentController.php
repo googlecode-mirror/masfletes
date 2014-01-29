@@ -99,7 +99,7 @@ class Agent_ShipmentController extends Model3_Controller
             
             $date = $shipment->getSourceDate()->format('Y-m-d');
             
-             $emailUser = $em->getRepository('DefaultDb_Entity_User');
+            $emailUser = $em->getRepository('DefaultDb_Entity_User');
             $this->view->email =  $emailUser->getEmailUser($this->_credentials['id']);
             foreach ($this->view->email as $value)
             { 
@@ -316,7 +316,9 @@ class Agent_ShipmentController extends Model3_Controller
                         </table><br />
                         <strong>Otros clientes interesados en estas '.$typeText.' tambi&eacute;n han sido notificados.</strong><br /><br />
                         <strong>Si deseas ser notificado de otras rutas por favor, cont&aacute;ctanos.</strong><br /><br />
-                        <strong>De interesarte alguna de ellas contacta a tu coordinador o comun&iacute;cate a los siguientes tel&eacute;fonos:</strong><br />
+                        <strong>De interesarte alguna de ellas contacta a tu coordinador o comun&iacute;cate a los siguientes tel&eacute;fonos:</strong><br /><br />
+                        <strong>Gracias por utilizar MasFletes.</strong><br />
+                        <strong>www.masfletes.com</strong><br /><br />
                         <strong>Nextel: 62 * 179099 *5 &oacute; *2 &oacute; al 01 - 444 - 2571546 con Arturo Mac&iacute;as</strong><br />
                         <strong>Oficina: 01 - 444 - 8240764 Con Cesar Castillo</strong><br />
                         <strong>Oficina: 01 - 444 - 8240647</strong><br />
@@ -452,8 +454,12 @@ class Agent_ShipmentController extends Model3_Controller
                         </table><br /><br />
                         <strong>'.$this->view->messageZone.'</strong><br />
                         <strong>'.$this->view->detailsZone.'</strong><br />
-                        <strong>Gracias por utilizar MasFletes.</strong><br />
+                         <strong>Gracias por utilizar MasFletes.</strong><br />
                         <strong>www.masfletes.com</strong><br /><br />
+                        <strong>Nextel: 62 * 179099 *5 &oacute; *2 &oacute; al 01 - 444 - 2571546 con Arturo Mac&iacute;as</strong><br />
+                        <strong>Oficina: 01 - 444 - 8240764 Con Cesar Castillo</strong><br />
+                        <strong>Oficina: 01 - 444 - 8240647</strong><br />
+                        <strong>Correo : masfletes@masfletes.com</strong><br /><br />
                         </p></body></html>';
 
                         $mail = new PHPMailer();
