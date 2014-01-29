@@ -476,8 +476,8 @@ class Customer_ShipmentController extends Model3_Controller
            
             if ($countRoute<=0)
             {
-                $correo='<html><head></head><body>
-                <h4>:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h4>
+                $correo='<html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
                 <p style="font-family:Arial;font-size:13px;line-height:16px;">
                 <strong>Gracias por utilizar nuestros servicios.</strong><br />
                 <strong>Su publicaci&oacute;n estara a la vista para todos los ususarios. </strong><br />
@@ -601,7 +601,8 @@ class Customer_ShipmentController extends Model3_Controller
            {
                 list ($typeText,$eventText)=$shipment->getTypeText();
 
-                $correo='<h4>:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h4>
+                $correo='<html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head><body bgcolor="#F5F5F5" leftmargin="18px" topmargin="10px" rightmargin="10px" bottommargin="10px">
+                <h3 style="color:#AF080F;text-align:left;">:::::: Notificaci&oacute;n de '.$typeText.' de MasFletes.com ::::::</h3>
                 <p style="font-family:Arial;font-size:13px;line-height:16px;">
                 <strong>Gracias por publicar tu '.$typeText.', existen '.$countRoute.' '.$eventText.' que se adaptan a tus necesidades.</strong><br /><br />
                 <strong>'.$this->view->messageZone.'</strong><br />
