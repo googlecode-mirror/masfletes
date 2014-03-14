@@ -77,6 +77,8 @@
                             <p class="navbar-text pull-right">
                                 <?php
                                 $auth = new Model3_Auth();
+                                var_dump($auth->getCredentials('id'));
+                                die;
                                 ?>
                                 <!--a href="#" class="navbar-link"><?php echo $auth->getCredentials('username');?></a-->
                                 &nbsp;&nbsp;
