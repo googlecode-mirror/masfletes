@@ -44,9 +44,6 @@ class DefaultDb_Entity_City extends \DefaultDb_Entity_City implements \Doctrine\
     
     public function getId()
     {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["id"];
-        }
         $this->__load();
         return parent::getId();
     }

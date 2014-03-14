@@ -69,10 +69,16 @@ class DefaultDb_Entity_State extends \DefaultDb_Entity_State implements \Doctrin
         return parent::getCities();
     }
 
+    public function getAbbrev()
+    {
+        $this->__load();
+        return parent::getAbbrev();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'cities');
+        return array('__isInitialized__', 'id', 'name', 'abbreviation', 'cities');
     }
 
     public function __clone()
