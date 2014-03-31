@@ -77,8 +77,6 @@
                             <p class="navbar-text pull-right">
                                 <?php
                                 $auth = new Model3_Auth();
-                                var_dump($auth->getCredentials('id'));
-                                die;
                                 ?>
                                 <!--a href="#" class="navbar-link"><?php echo $auth->getCredentials('username');?></a-->
                                 &nbsp;&nbsp;
@@ -131,6 +129,9 @@
                                     <ul class="dropdown-menu">
                                          <li><a href="<?php echo $view->url(array('controller' => 'ConfigurationsEmail', 'action' => 'index')); ?>">Configuraciones</a></li>
                                     </ul>
+                                </li>
+                                <li>
+                                    <li><a href="https://dashboard.zopim.com/?lang=es" target="_blank">Chat</a></li>
                                 </li>
 <!--                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">MasFletes.com <b class="caret"></b></a>

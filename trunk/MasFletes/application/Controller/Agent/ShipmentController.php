@@ -32,7 +32,7 @@ class Agent_ShipmentController extends Model3_Controller
         $this->view->getJsManager()->addJsVar('urlSearch', '"' . $this->view->url(array('module' => 'Ajax', 'controller' => 'Search', 'action' => 'search')).'"');
         $this->view->getJsManager()->addJsVar('urlDelete', '"' . $this->view->url(array('module' => 'Ajax', 'controller' => 'Modal', 'action' => 'delete')).'"');
         
-        $em = $this->getEntityManager('DefaultDb');        
+        $em = $this->getEntityManager('DefaultDb');
         $user = $em->getRepository('DefaultDb_Entity_User')->find($this->_credentials['id']);
         $this->view->shipments = $em->getRepository('DefaultDb_Entity_Shipment')->findBy(array('user' => $user));
     }
