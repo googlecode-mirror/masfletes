@@ -77,11 +77,10 @@ class Ajax_SearchController extends Model3_Controller
                 
                 $query = $query->setParameter('f_fin',$fFin);
             }
-            
             //Usuario
-            if( $entity !== 'Operation' )
-                $query = $query->andWhere('s.user = :user')->setParameter('user',$user);
-                    
+//            if( $entity !== 'Operation' )
+//                $query = $query->andWhere('s.user = :user')->setParameter('user',$user);
+//              var_dump($query->getQuery());      
             $list = $query->getQuery()->getResult();
             $this->view->userType = $userType;
             $this->view->entityName = $entity;
